@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import PostitNote from '../components/PostitNote.jsx';
 import { useLiveNotes } from '../lib/useLiveNotes.js';
@@ -5,6 +6,7 @@ import { useLiveNotes } from '../lib/useLiveNotes.js';
 export default function Wall() {
   const { notes, loaded } = useLiveNotes();
   const boardUrl = `${window.location.origin}/`;
+  const [qrOpen, setQrOpen] = useState(false);
 
   return (
     <div
@@ -43,6 +45,7 @@ export default function Wall() {
             <span style={{ font: "700 12px/1 'Noto Sans KR'", color: '#5d564b' }}>실시간</span>
           </div>
           <div
+            onClick={() => setQrOpen(true)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -51,6 +54,7 @@ export default function Wall() {
               border: '1px solid rgba(0,0,0,.08)',
               padding: '9px 14px',
               borderRadius: 10,
+              cursor: 'pointer',
             }}
           >
             <div
@@ -73,6 +77,42 @@ export default function Wall() {
           </div>
         </div>
       </div>
+
+      {qrOpen && (
+        <div
+          onClick={() => setQrOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 90,
+            background: 'rgba(28,25,20,.72)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            animation: 'fadeIn .2s ease both',
+          }}
+        >
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: 24,
+              padding: 32,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 18,
+              boxShadow: '0 24px 60px -16px rgba(28,25,20,.6)',
+              animation: 'riseIn .25s cubic-bezier(.22,1,.36,1) both',
+            }}
+          >
+            <QRCodeSVG value={boardUrl} size={280} bgColor="#ffffff" fgColor="#221f1a" />
+            <span style={{ font: "700 13px/1.4 'Noto Sans KR'", color: '#5d564b' }}>
+              QR을 스캔해서 인삿말을 남겨보세요
+            </span>
+          </div>
+        </div>
+      )}
 
       {loaded && notes.length === 0 ? (
         <div
