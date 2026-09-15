@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#e8e4da;font-family:'Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:#d9534a;text-decoration:none}
+  a:hover{color:#b23d35}
+  *{box-sizing:border-box}
+  input,textarea,button{font-family:inherit}
+  textarea{resize:none}
+  @keyframes pop{0%{opacity:0;transform:scale(.7) rotate(0deg)}60%{opacity:1;transform:scale(1.06) rotate(var(--r,0deg))}100%{opacity:1;transform:scale(1) rotate(var(--r,0deg))}}
+  @keyframes riseIn{0%{opacity:0;transform:translateY(24px) scale(.96)}100%{opacity:1;transform:none}}
+  @keyframes sheetUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes tick{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  ::-webkit-scrollbar{width:0;height:6px}
+</style>
+</helmet>
+
+<div style="max-width:1180px;margin:0 auto;padding:44px 24px 80px">
+
+  <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between;margin-bottom:10px">
+    <div style="max-width:560px">
+      <div style="display:inline-block;font:700 11px/1 'Noto Sans KR';letter-spacing:.14em;color:#b2472f;background:#ffe14d;padding:7px 10px;border-radius:3px;transform:rotate(-1.5deg);margin-bottom:16px">디지털 포스트잇 방명록 · UI 디자인</div>
+      <h1 style="font:900 38px/1.18 'Noto Sans KR';color:#221f1a;margin:0 0 12px;letter-spacing:-.02em">붙여요, 오리엔테이션 벽</h1>
+      <p style="font:400 14px/1.75 'Noto Sans KR';color:#5d564b;margin:0;text-wrap:pretty">QR 접속 → 벽 구경 → 포스트잇 한 장. 회원가입도, 로그인도 없습니다. 닉네임만 적으면 바로 붙습니다. 아래 프로토타입은 실제로 동작합니다 — 써보고 붙여보세요.</p>
+    </div>
+    <div style="display:flex;gap:26px;padding:16px 22px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+      <div><div style="font:900 22px/1 'Noto Sans KR';color:#221f1a">0초</div><div style="font:500 11px/1.4 'Noto Sans KR';color:#8a8378;margin-top:5px">가입 절차</div></div>
+      <div><div style="font:900 22px/1 'Noto Sans KR';color:#221f1a">3탭</div><div style="font:500 11px/1.4 'Noto Sans KR';color:#8a8378;margin-top:5px">작성까지</div></div>
+      <div><div style="font:900 22px/1 'Noto Sans KR';color:#221f1a">6색</div><div style="font:500 11px/1.4 'Noto Sans KR';color:#8a8378;margin-top:5px">포스트잇</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 20px;align-items:center">
+    <span style="font:700 11px/1 'Noto Sans KR';letter-spacing:.1em;color:#8a8378;margin-right:4px">모바일 프로토타입</span>
+    <button onClick="{{ showBoard }}" style="font:700 12px/1 'Noto Sans KR';padding:10px 14px;border-radius:999px;cursor:pointer;border:1px solid {{ boardBorder }};background:{{ boardBg }};color:{{ boardInk }}">포스트잇 보드</button>
+    <button onClick="{{ showEmpty }}" style="font:700 12px/1 'Noto Sans KR';padding:10px 14px;border-radius:999px;cursor:pointer;border:1px solid {{ emptyBorder }};background:{{ emptyBg }};color:{{ emptyInk }}">첫 방문 · 빈 보드</button>
+    <span style="font:400 12px/1.5 'Noto Sans KR';color:#a09889;margin-left:6px">{{ stateHint }}</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+
+    <div style="position:relative;flex:none;width:392px;height:800px;background:#141310;border-radius:52px;padding:11px;box-shadow:0 30px 60px -20px rgba(34,31,26,.5),0 0 0 1px rgba(255,255,255,.06) inset">
+      <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#f4f1e8">
+
+        <div style="position:absolute;top:0;left:0;right:0;height:52px;z-index:40;display:flex;align-items:flex-end;justify-content:space-between;padding:0 26px 8px;font:700 13px/1 'Noto Sans KR';color:#221f1a;background:linear-gradient(#f4f1e8 60%,rgba(244,241,232,0))">
+          <span>9:41</span>
+          <span style="display:flex;gap:5px;align-items:center;opacity:.85">
+            <span style="width:17px;height:10px;border:1.5px solid #221f1a;border-radius:3px;display:inline-block;position:relative"><span style="position:absolute;inset:1.5px;right:5px;background:#221f1a;border-radius:1px;display:block"></span></span>
+          </span>
+        </div>
+
+        <div style="position:absolute;top:52px;left:0;right:0;z-index:30;padding:6px 20px 14px;background:linear-gradient(#f4f1e8 70%,rgba(244,241,232,0))">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font:900 21px/1.25 'Noto Sans KR';color:#221f1a;letter-spacing:-.02em">Welcome to BEGINLAB</div>
+              <div style="font:500 11.5px/1.4 'Noto Sans KR';color:#8a8378;margin-top:3px">{{ countLabel }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid rgba(0,0,0,.07);padding:7px 11px;border-radius:999px;box-shadow:0 1px 2px rgba(0,0,0,.04)">
+              <span style="width:6px;height:6px;border-radius:50%;background:#3ec98b;box-shadow:0 0 0 3px rgba(62,201,139,.22)"></span>
+              <span style="font:700 10.5px/1 'Noto Sans KR';color:#5d564b;letter-spacing:.02em">LIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:absolute;inset:0;overflow-y:auto;padding:128px 16px 130px;background-image:radial-gradient(rgba(34,31,26,.05) 1px,transparent 1px);background-size:15px 15px">
+          <sc-if value="{{ hasNotes }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;padding:8px 6px 0">
+              <sc-for list="{{ notes }}" as="n" hint-placeholder-count="6">
+                <div style="position:relative;padding:16px 14px 14px;min-height:148px;display:flex;flex-direction:column;border-radius:2px;background:{{ n.bg }};box-shadow:{{ n.shadow }};animation:{{ n.anim }};--r:{{ n.rot }};transform:rotate({{ n.rot }})">
+                  <div style="position:absolute;top:-9px;left:50%;margin-left:-22px;width:44px;height:17px;background:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.7);border-right:1px solid rgba(0,0,0,.05);transform:rotate({{ n.tape }});box-shadow:0 1px 2px rgba(0,0,0,.07)"></div>
+                  <p style="font:400 20px/1.35 'Nanum Pen Script',cursive;color:#2b2720;margin:6px 0 0;flex:1;word-break:break-word">{{ n.msg }}</p>
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;border-top:1px dashed rgba(43,39,32,.22);padding-top:8px">
+                    <span style="font:700 10.5px/1 'Noto Sans KR';color:#2b2720;opacity:.72;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:88px">{{ n.name }}</span>
+                    <span style="font:500 9.5px/1 'Noto Sans KR';color:#2b2720;opacity:.45">{{ n.time }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 26px 0;animation:fadeIn .5s ease both">
+              <div style="position:relative;width:132px;height:132px;margin-bottom:34px">
+                <div style="position:absolute;inset:0;border-radius:3px;border:2px dashed rgba(34,31,26,.2);transform:rotate(-6deg)"></div>
+                <div style="position:absolute;inset:0;border-radius:3px;border:2px dashed rgba(34,31,26,.14);transform:rotate(5deg)"></div>
+                <div style="position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:3px;background:#ffe14d;transform:rotate(-3deg);box-shadow:0 8px 16px -6px rgba(34,31,26,.35);display:flex;align-items:center;justify-content:center;font:400 26px/1 'Nanum Pen Script',cursive;color:#8a6a00">?</div>
+              </div>
+              <h2 style="font:900 20px/1.4 'Noto Sans KR';color:#221f1a;margin:0 0 10px">벽이 아직 비어 있어요</h2>
+              <p style="font:400 13.5px/1.75 'Noto Sans KR';color:#7a7367;margin:0 0 26px;max-width:250px;text-wrap:pretty">첫 포스트잇을 붙이는 사람이 되어보세요. 이름은 안 밝혀도 괜찮아요.</p>
+              <button onClick="{{ openSheet }}" style="font:700 14px/1 'Noto Sans KR';color:#fff;background:#221f1a;border:none;padding:16px 26px;border-radius:999px;cursor:pointer;box-shadow:0 10px 22px -10px rgba(34,31,26,.7)">첫 인삿말 남기기</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="position:absolute;left:0;right:0;bottom:0;z-index:35;padding:0 20px 26px;display:flex;justify-content:center;background:linear-gradient(rgba(244,241,232,0),#f4f1e8 52%)">
+          <button onClick="{{ openSheet }}" style="width: 100%; height: 56px; display: flex; align-items: center; justify-content: center; gap: 9px; font: 700 15px/1 'Noto Sans KR'; color: #fff; border: none; border-radius: 16px; cursor: pointer; box-shadow: 0px 14px 26px -12px #F8F8F8D9; background-color: #0062FF" style-hover="background:#c2473f">
+            <span style="font-size:19px;line-height:1;margin-top:-2px">＋</span> 포스트잇 붙이기
+          </button>
+        </div>
+
+        <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;z-index:50;background:rgba(28,25,20,.5);animation:fadeIn .22s ease both" onClick="{{ closeSheet }}"></div>
+        </sc-if>
+
+        <sc-if value="{{ showForm }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:60;background:#fffdf7;border-radius:26px 26px 0 0;padding:14px 20px 26px;box-shadow:0 -18px 40px -14px rgba(28,25,20,.4);animation:sheetUp .3s cubic-bezier(.22,1,.36,1) both;max-height:96%;overflow-y:auto">
+            <div style="width:40px;height:4px;border-radius:2px;background:rgba(34,31,26,.16);margin:0 auto 16px"></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px">
+              <h3 style="font:900 19px/1.3 'Noto Sans KR';color:#221f1a;margin:0">인삿말 남기기</h3>
+              <button onClick="{{ closeSheet }}" style="border:none;background:none;cursor:pointer;font:500 12px/1 'Noto Sans KR';color:#a09889;padding:4px">닫기</button>
+            </div>
+
+            <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:9px">
+              <span style="font:700 11px/1 'Noto Sans KR';letter-spacing:.06em;color:#a09889">닉네임</span>
+              <span style="font:700 11px/1 'Noto Sans KR';color:#d9534a">필수</span>
+            </div>
+            <div style="display:flex;margin-bottom:8px">
+              <input value="{{ nick }}" onChange="{{ onNick }}" placeholder="닉네임을 입력해주세요" style="flex:1;min-width:0;height:48px;padding:0 15px;border-radius:12px;border:1.5px solid {{ nickBorder }};background:#fff;font:500 14px/1 'Noto Sans KR';color:#221f1a;outline:none">
+            </div>
+            <div style="font:400 11.5px/1.5 'Noto Sans KR';color:#a09889;margin-bottom:20px">{{ nickHint }}</div>
+
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px">
+              <span style="font:700 11px/1 'Noto Sans KR';letter-spacing:.06em;color:#a09889">인삿말</span>
+              <span style="font:700 11px/1 'Noto Sans KR';color:{{ countInk }}">{{ charCount }}</span>
+            </div>
+            <div style="position:relative;border-radius:3px;background:{{ draftBg }};padding:15px 15px 13px;box-shadow:0 10px 22px -14px rgba(34,31,26,.6);transform:rotate(-.6deg);margin-bottom:22px">
+              <div style="position:absolute;top:-9px;left:50%;margin-left:-24px;width:48px;height:17px;background:rgba(255,255,255,.55);transform:rotate(-2deg);box-shadow:0 1px 2px rgba(0,0,0,.07)"></div>
+              <textarea value="{{ msg }}" onChange="{{ onMsg }}" rows="3" maxLength="{{ maxLen }}" placeholder="오늘 처음 뵙네요, 잘 부탁드립니다!" style="width:100%;border:none;background:transparent;outline:none;font:400 23px/1.4 'Nanum Pen Script',cursive;color:#2b2720;min-height:84px"></textarea>
+              <div style="font:700 10.5px/1 'Noto Sans KR';color:#2b2720;opacity:.6;text-align:right;border-top:1px dashed rgba(43,39,32,.22);padding-top:9px">{{ previewName }}</div>
+            </div>
+
+            <div style="font:700 11px/1 'Noto Sans KR';letter-spacing:.06em;color:#a09889;margin-bottom:11px">색 고르기</div>
+            <div style="display:flex;gap:11px;margin-bottom:24px;flex-wrap:wrap">
+              <sc-for list="{{ palette }}" as="c" hint-placeholder-count="6">
+                <button onClick="{{ c.pick }}" title="{{ c.label }}" style="width:46px;height:46px;border-radius:3px;cursor:pointer;background:{{ c.bg }};border:2px solid {{ c.ring }};box-shadow:{{ c.shadow }};transform:rotate({{ c.rot }});display:flex;align-items:flex-end;justify-content:flex-end;padding:4px">
+                  <span style="font:900 12px/1 'Noto Sans KR';color:#2b2720;opacity:{{ c.check }}">✓</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ submit }}" disabled="{{ cantSubmit }}" style="width:100%;height:56px;border:none;border-radius:16px;cursor:{{ submitCursor }};font:700 15px/1 'Noto Sans KR';color:{{ submitInk }};background:{{ submitBg }};box-shadow:{{ submitShadow }}">벽에 붙이기</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ success }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:60;background:#fffdf7;border-radius:26px 26px 0 0;padding:34px 26px 30px;text-align:center;box-shadow:0 -18px 40px -14px rgba(28,25,20,.4);animation:sheetUp .3s cubic-bezier(.22,1,.36,1) both">
+            <div style="width:62px;height:62px;margin:0 auto 20px;border-radius:50%;background:#3ec98b;display:flex;align-items:center;justify-content:center;font:900 26px/1 'Noto Sans KR';color:#fff;animation:tick .45s cubic-bezier(.22,1,.36,1) both;box-shadow:0 12px 24px -10px rgba(62,201,139,.9)">✓</div>
+            <h3 style="font:900 20px/1.4 'Noto Sans KR';color:#221f1a;margin:0 0 9px">벽에 붙였어요!</h3>
+            <p style="font:400 13.5px/1.7 'Noto Sans KR';color:#7a7367;margin:0 0 24px">{{ successLine }}</p>
+            <div style="display:flex;gap:10px">
+              <button onClick="{{ closeAll }}" style="flex:1;height:52px;border:1.5px solid rgba(34,31,26,.15);background:#fff;border-radius:14px;cursor:pointer;font:700 14px/1 'Noto Sans KR';color:#221f1a">보드 보기</button>
+              <button onClick="{{ again }}" style="flex:1;height:52px;border:none;background:#d9534a;border-radius:14px;cursor:pointer;font:700 14px/1 'Noto Sans KR';color:#fff">한 장 더</button>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:26px">
+
+      <div>
+        <div style="font:700 11px/1 'Noto Sans KR';letter-spacing:.1em;color:#8a8378;margin-bottom:12px">PC · 벽 모드 (빔 프로젝터 송출용)</div>
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.05)">
+          <div style="height:38px;display:flex;align-items:center;gap:7px;padding:0 14px;background:#f6f4ef;border-bottom:1px solid rgba(0,0,0,.07)">
+            <span style="width:9px;height:9px;border-radius:50%;background:#e5786f"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#f2c14b"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#8fd39a"></span>
+            <span style="margin-left:12px;font:500 11px/1 'Noto Sans KR';color:#a09889;background:#fff;border:1px solid rgba(0,0,0,.07);padding:6px 12px;border-radius:999px">ot-wall.kr/2026</span>
+          </div>
+          <div style="position:relative;padding:26px 24px 30px;background:#f4f1e8;background-image:radial-gradient(rgba(34,31,26,.05) 1px,transparent 1px);background-size:18px 18px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px">
+              <div style="font:900 24px/1.2 'Noto Sans KR';color:#221f1a;letter-spacing:-.02em"><span style="font-size: 21px; letter-spacing: -0.42px;">Welcome to BEGINLAB</span></div>
+              <div style="display:flex;align-items:center;gap:14px">
+                <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#3ec98b;box-shadow:0 0 0 3px rgba(62,201,139,.22)"></span><span style="font:700 10.5px/1 'Noto Sans KR';color:#5d564b">실시간</span></div>
+                <div style="display:flex;align-items:center;gap:9px;background:#fff;border:1px solid rgba(0,0,0,.08);padding:8px 12px;border-radius:8px">
+                  <div style="width:30px;height:30px;background:repeating-conic-gradient(#221f1a 0% 25%,#fff 0% 50%) 0 0/8px 8px;border-radius:2px"></div>
+                  <span style="font:700 10.5px/1.4 'Noto Sans KR';color:#5d564b">QR 스캔 후<br>바로 작성</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:20px 16px">
+              <sc-for list="{{ wallNotes }}" as="n" hint-placeholder-count="10">
+                <div style="position:relative;padding:14px 12px 11px;min-height:132px;display:flex;flex-direction:column;border-radius:2px;background:{{ n.bg }};box-shadow:{{ n.shadow }};transform:rotate({{ n.rot }})">
+                  <div style="position:absolute;top:-8px;left:50%;margin-left:-19px;width:38px;height:15px;background:rgba(255,255,255,.55);transform:rotate({{ n.tape }});box-shadow:0 1px 2px rgba(0,0,0,.07)"></div>
+                  <p style="font:400 18px/1.35 'Nanum Pen Script',cursive;color:#2b2720;margin:5px 0 0;flex:1;word-break:break-word">{{ n.msg }}</p>
+                  <div style="font:700 9.5px/1 'Noto Sans KR';color:#2b2720;opacity:.7;margin-top:10px;border-top:1px dashed rgba(43,39,32,.22);padding-top:7px">{{ n.name }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:18px">
+          <div style="font:900 13px/1.4 'Noto Sans KR';color:#221f1a;margin-bottom:7px">가입 없이, 3탭</div>
+          <p style="font:400 12.5px/1.7 'Noto Sans KR';color:#7a7367;margin:0">닉네임 + 인삿말 + 색, 두 칸이면 끝. 닉네임은 최대 12자, 본명 대신 편한 이름으로.</p>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:18px">
+          <div style="font:900 13px/1.4 'Noto Sans KR';color:#221f1a;margin-bottom:7px">종이의 물성</div>
+          <p style="font:400 12.5px/1.7 'Noto Sans KR';color:#7a7367;margin:0">테이프, ±3° 기울기, 두 겹 그림자, 점선 접힘선. 손글씨는 포스트잇 본문에만 — 나머지는 또박또박.</p>
+        </div>
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:18px">
+          <div style="font:900 13px/1.4 'Noto Sans KR';color:#221f1a;margin-bottom:7px">붙는 순간</div>
+          <p style="font:400 12.5px/1.7 'Noto Sans KR';color:#7a7367;margin:0">새 포스트잇은 보드 맨 앞에 pop 애니메이션으로 등장. 완료 시트에서 '한 장 더'로 연속 작성.</p>
+        </div>
+      </div>
+
+      <p style="font:400 12.5px/1.8 'Noto Sans KR';color:#8a8378;margin:0;text-wrap:pretty">다음으로 볼 수 있는 것 — 포스트잇 상세/확대 보기, 신고·숨기기 운영자 화면, 세션별 보드 생성 플로우, 벽 모드 자동 스크롤 연출.</p>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:980}}">
+const PALETTE = [
+  {key:'yellow', bg:'#ffe14d', label:'노랑'},
+  {key:'pink',   bg:'#ffa8c9', label:'분홍'},
+  {key:'mint',   bg:'#a0e7cf', label:'민트'},
+  {key:'blue',   bg:'#a9d3ff', label:'하늘'},
+  {key:'orange', bg:'#ffbc7a', label:'주황'},
+  {key:'lilac',  bg:'#cfbdff', label:'라일락'},
+];
+const SEED = [
+  {name:'익명', msg:'다들 긴장 풀고 재밌게 보내요 🙂', color:'yellow', time:'방금'},
+  {name:'복학생김', msg:'2년 만에 학교 옴… 잘 부탁드립니다', color:'blue', time:'1분 전'},
+  {name:'익명', msg:'취업스터디 같이 하실 분 조용히 손', color:'mint', time:'2분 전'},
+  {name:'라면조교', msg:'점심 뭐 먹을지부터 정하자', color:'orange', time:'3분 전'},
+  {name:'익명', msg:'앞자리 앉은 분 필기 잘하시네요', color:'pink', time:'4분 전'},
+  {name:'해린', msg:'올해는 진짜 다르게 살아보려고요', color:'lilac', time:'5분 전'},
+  {name:'익명', msg:'조 배정 같은 조 되신 분 반가워요!', color:'yellow', time:'6분 전'},
+  {name:'전공바꿈', msg:'문과에서 왔습니다 살살 부탁', color:'mint', time:'7분 전'},
+  {name:'익명', msg:'끝나고 커피 쏘는 사람 있다던데', color:'blue', time:'8분 전'},
+  {name:'준희', msg:'모두 원하는 곳에 합격하시길', color:'pink', time:'9분 전'},
+];
+const MAX = 60;
+const bgOf = k => (PALETTE.find(c => c.key === k) || PALETTE[0]).bg;
+const SHADOW = '0 1px 1px rgba(34,31,26,.14), 0 10px 18px -10px rgba(34,31,26,.45)';
+
+class Component extends DCLogic {
+  state = {
+    notes: SEED.map((n, i) => ({...n, id: 'seed' + i})),
+    empty: false, sheetOpen: false, success: false, newestId: null,
+    nick: '', msg: '', color: 'yellow',
+  };
+
+  rot(id, amp) {
+    let h = 0;
+    for (let i = 0; i < String(id).length; i++) h = (h * 31 + String(id).charCodeAt(i)) % 1000;
+    return ((h / 1000) * 2 - 1) * amp;
+  }
+
+  decorate(n, amp, isNew) {
+    return {
+      ...n,
+      bg: bgOf(n.color),
+      shadow: SHADOW,
+      rot: this.rot(n.id, amp).toFixed(2) + 'deg',
+      tape: this.rot(n.id + 't', 6).toFixed(2) + 'deg',
+      anim: isNew ? 'pop .5s cubic-bezier(.22,1,.36,1) both' : 'riseIn .4s ease both',
+    };
+  }
+
+  submit = () => {
+    const msg = this.state.msg.trim();
+    const name = this.state.nick.trim();
+    if (!msg || !name) return;
+    const id = 'n' + Date.now();
+    this.setState(s => ({
+      notes: [{id, name, msg, color: s.color, time: '방금'}, ...s.notes],
+      newestId: id, empty: false, success: true, sheetOpen: true,
+    }));
+  };
+
+  renderVals() {
+    const s = this.state;
+    const isEmpty = s.empty && s.notes.filter(n => !String(n.id).startsWith('seed')).length === 0;
+    const list = isEmpty ? [] : (s.empty ? s.notes.filter(n => !String(n.id).startsWith('seed')) : s.notes);
+    const trimmed = s.msg.trim();
+    const nick = s.nick.trim();
+    const can = trimmed.length > 0 && nick.length > 0;
+    const selBg = bgOf(s.color);
+
+    return {
+      notes: list.map(n => this.decorate(n, 3, n.id === s.newestId)),
+      wallNotes: (s.empty ? list : s.notes).slice(0, 12).map(n => this.decorate(n, 2.6, false)),
+      hasNotes: list.length > 0,
+      isEmpty,
+      countLabel: list.length > 0 ? list.length + '개의 인삿말이 붙어 있어요' : '아직 아무도 붙이지 않았어요',
+      stateHint: s.empty ? '오프닝 직전, 첫 참가자가 보는 화면' : '세션 중, 인삿말이 쌓인 화면',
+
+      boardBg: s.empty ? '#fff' : '#221f1a', boardInk: s.empty ? '#5d564b' : '#fff',
+      boardBorder: s.empty ? 'rgba(0,0,0,.12)' : '#221f1a',
+      emptyBg: s.empty ? '#221f1a' : '#fff', emptyInk: s.empty ? '#fff' : '#5d564b',
+      emptyBorder: s.empty ? '#221f1a' : 'rgba(0,0,0,.12)',
+      showBoard: () => this.setState({empty: false, sheetOpen: false, success: false}),
+      showEmpty: () => this.setState({empty: true, sheetOpen: false, success: false, notes: SEED.map((n, i) => ({...n, id: 'seed' + i})), newestId: null}),
+
+      sheetOpen: s.sheetOpen,
+      showForm: s.sheetOpen && !s.success,
+      success: s.success,
+      openSheet: () => this.setState({sheetOpen: true, success: false, msg: '', nick: '', color: 'yellow'}),
+      closeSheet: () => this.setState({sheetOpen: false, success: false}),
+      closeAll: () => this.setState({sheetOpen: false, success: false}),
+      again: () => this.setState({sheetOpen: true, success: false, msg: '', color: 'mint'}),
+
+      nick: s.nick, msg: s.msg, maxLen: MAX,
+      onNick: e => this.setState({nick: e.target.value.slice(0, 12)}),
+      onMsg: e => this.setState({msg: e.target.value.slice(0, MAX)}),
+      nickBorder: nick ? '#221f1a' : 'rgba(34,31,26,.14)',
+      nickHint: nick ? '이 이름으로 포스트잇에 표시돼요.' : '최대 12자. 본명이 아니어도 괜찮아요.',
+
+      charCount: s.msg.length + ' / ' + MAX,
+      countInk: s.msg.length >= MAX ? '#d9534a' : '#a09889',
+      draftBg: selBg,
+      previewName: nick || '닉네임',
+
+      palette: PALETTE.map(c => ({
+        ...c,
+        ring: c.key === s.color ? '#221f1a' : 'rgba(0,0,0,.06)',
+        shadow: c.key === s.color ? '0 8px 16px -8px rgba(34,31,26,.6)' : '0 3px 8px -5px rgba(34,31,26,.5)',
+        rot: (c.key === s.color ? -4 : this.rot(c.key, 3)).toFixed(1) + 'deg',
+        check: c.key === s.color ? 1 : 0,
+        pick: () => this.setState({color: c.key}),
+      })),
+
+      submit: this.submit,
+      cantSubmit: !can,
+      submitBg: can ? '#221f1a' : 'rgba(34,31,26,.1)',
+      submitInk: can ? '#fff' : 'rgba(34,31,26,.35)',
+      submitCursor: can ? 'pointer' : 'not-allowed',
+      submitShadow: can ? '0 14px 26px -14px rgba(34,31,26,.9)' : 'none',
+      successLine: list.length > 1 ? '이제 ' + list.length + '장이 벽에 붙어 있어요.' : '첫 포스트잇이에요. 벽을 열었습니다!',
+    };
+  }
+}
+</script>
+</body>
+</html>
