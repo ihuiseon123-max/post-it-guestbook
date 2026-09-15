@@ -194,42 +194,46 @@ export default function Board() {
         onWriteAnother={openSheet}
       />
 
-      <Link
-        to="/wall"
+      <div
         style={{
           position: 'fixed',
           top: 14,
           right: 14,
-          zIndex: 20,
-          font: "700 10px/1 'Noto Sans KR'",
-          color: '#a09889',
-          background: '#fff',
-          border: '1px solid rgba(0,0,0,.08)',
-          padding: '6px 10px',
-          borderRadius: 999,
-        }}
-      >
-        벽 모드 →
-      </Link>
-
-      <button
-        onClick={openReset}
-        style={{
-          position: 'fixed',
-          top: 14,
-          left: 14,
           zIndex: 40,
-          font: "700 10px/1 'Noto Sans KR'",
-          color: '#fff',
-          background: '#9a9488',
-          border: 'none',
-          padding: '6px 10px',
-          borderRadius: 999,
-          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
         }}
       >
-        초기화
-      </button>
+        <button
+          onClick={openReset}
+          style={{
+            font: "700 11px/1 'Noto Sans KR'",
+            color: '#fff',
+            background: '#9a9488',
+            border: 'none',
+            padding: '7px 11px',
+            borderRadius: 999,
+            cursor: 'pointer',
+          }}
+        >
+          초기화
+        </button>
+
+        <Link
+          to="/wall"
+          style={{
+            font: "700 10px/1 'Noto Sans KR'",
+            color: '#a09889',
+            background: '#fff',
+            border: '1px solid rgba(0,0,0,.08)',
+            padding: '6px 10px',
+            borderRadius: 999,
+          }}
+        >
+          벽 모드 →
+        </Link>
+      </div>
 
       <ResetDialog
         open={resetOpen}

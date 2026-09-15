@@ -29,7 +29,6 @@ export default function ResetDialog({ open, onClose, onConfirm, submitting, erro
           position: 'fixed',
           left: '50%',
           top: '50%',
-          transform: 'translate(-50%, -50%)',
           zIndex: 80,
           width: '88%',
           maxWidth: 300,
@@ -37,7 +36,7 @@ export default function ResetDialog({ open, onClose, onConfirm, submitting, erro
           borderRadius: 20,
           padding: '24px 20px 20px',
           boxShadow: '0 24px 48px -16px rgba(28,25,20,.5)',
-          animation: 'riseIn .25s cubic-bezier(.22,1,.36,1) both',
+          animation: 'dialogIn .22s cubic-bezier(.22,1,.36,1) both',
           textAlign: 'center',
         }}
       >
