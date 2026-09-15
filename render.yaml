@@ -5,8 +5,6 @@ services:
     plan: starter
     buildCommand: npm run build
     startCommand: npm start
-    autoscaling:
-      enabled: false
     disk:
       name: postit-data
       mountPath: /var/data
