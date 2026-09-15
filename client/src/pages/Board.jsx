@@ -4,8 +4,9 @@ import PostitNote from '../components/PostitNote.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import WriteSheet from '../components/WriteSheet.jsx';
 import SuccessSheet from '../components/SuccessSheet.jsx';
+import ResetDialog from '../components/ResetDialog.jsx';
 import { useLiveNotes } from '../lib/useLiveNotes.js';
-import { postNote } from '../lib/api.js';
+import { postNote, resetBoard } from '../lib/api.js';
 
 export default function Board() {
   const { notes, loaded, addLocalNote, newestId } = useLiveNotes();
@@ -14,6 +15,30 @@ export default function Board() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [lastColor, setLastColor] = useState('yellow');
+  const [resetOpen, setResetOpen] = useState(false);
+  const [resetSubmitting, setResetSubmitting] = useState(false);
+  const [resetError, setResetError] = useState(null);
+
+  const openReset = () => {
+    setResetError(null);
+    setResetOpen(true);
+  };
+  const closeReset = () => {
+    setResetOpen(false);
+    setResetError(null);
+  };
+  const handleReset = async (code) => {
+    setResetSubmitting(true);
+    setResetError(null);
+    try {
+      await resetBoard(code);
+      setResetOpen(false);
+    } catch (e) {
+      setResetError(e.message);
+    } finally {
+      setResetSubmitting(false);
+    }
+  };
 
   const openSheet = () => {
     setSuccess(false);
@@ -186,6 +211,33 @@ export default function Board() {
       >
         벽 모드 →
       </Link>
+
+      <button
+        onClick={openReset}
+        style={{
+          position: 'fixed',
+          top: 14,
+          left: 14,
+          zIndex: 40,
+          font: "700 10px/1 'Noto Sans KR'",
+          color: '#fff',
+          background: '#9a9488',
+          border: 'none',
+          padding: '6px 10px',
+          borderRadius: 999,
+          cursor: 'pointer',
+        }}
+      >
+        초기화
+      </button>
+
+      <ResetDialog
+        open={resetOpen}
+        onClose={closeReset}
+        onConfirm={handleReset}
+        submitting={resetSubmitting}
+        error={resetError}
+      />
     </div>
   );
 }

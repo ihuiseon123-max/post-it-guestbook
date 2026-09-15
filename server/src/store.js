@@ -47,3 +47,8 @@ export function addNote({ name, msg, color }) {
   save(notes);
   return note;
 }
+
+export function resetNotes() {
+  notes = [];
+  save(notes);
+}

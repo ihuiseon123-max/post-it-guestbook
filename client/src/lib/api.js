@@ -35,3 +35,15 @@ export async function postNote({ name, msg, color }) {
   const data = await res.json();
   return data.note;
 }
+
+export async function resetBoard(code) {
+  const res = await fetch(`${API_URL}/api/reset`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ code }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || '초기화에 실패했어요.');
+  }
+}

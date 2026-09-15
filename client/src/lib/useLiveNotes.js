@@ -49,6 +49,8 @@ export function useLiveNotes() {
           const payload = JSON.parse(event.data);
           if (payload.type === 'note:new' && payload.note) {
             upsert(payload.note);
+          } else if (payload.type === 'notes:reset') {
+            setNotes([]);
           }
         } catch {
           // ignore malformed frames

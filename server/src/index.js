@@ -5,7 +5,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { WebSocketServer } from 'ws';
-import { listNotes, addNote, COLORS, NICK_MAX, MSG_MAX } from './store.js';
+import { listNotes, addNote, resetNotes, COLORS, NICK_MAX, MSG_MAX } from './store.js';
+
+const RESET_CODE = '8015';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 4000;
@@ -36,6 +38,16 @@ app.post('/api/notes', (req, res) => {
   const note = addNote({ name, msg, color });
   broadcast({ type: 'note:new', note });
   res.status(201).json({ note });
+});
+
+app.post('/api/reset', (req, res) => {
+  const code = String(req.body?.code ?? '');
+  if (code !== RESET_CODE) {
+    return res.status(403).json({ error: '리셋 코드가 올바르지 않아요.' });
+  }
+  resetNotes();
+  broadcast({ type: 'notes:reset' });
+  res.json({ ok: true });
 });
 
 if (CLIENT_BUILT) {
