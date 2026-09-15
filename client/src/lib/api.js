@@ -1,5 +1,17 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-const WS_URL = API_URL.replace(/^http/, 'ws') + '/ws';
+// Unset (e.g. production build) means "same origin as the page" — the
+// server serves both the API and the built client from one domain, so no
+// URL needs to be baked in at build time. .env.development sets this to
+// http://localhost:4000 for local dev, where client and server run as
+// separate processes on separate ports.
+const configured = import.meta.env.VITE_API_URL;
+const API_URL = configured || '';
+
+// WebSocket URLs must be absolute with an explicit ws/wss scheme — browsers
+// don't infer it from a relative path — so this is built by hand rather
+// than reused from a relative API_URL.
+const WS_URL = configured
+  ? configured.replace(/^http/, 'ws') + '/ws'
+  : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
 
 export { API_URL, WS_URL };
 

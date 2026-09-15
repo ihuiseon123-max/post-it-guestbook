@@ -3,7 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, '..', 'data');
+// DATA_DIR lets a deploy point this at a mounted persistent disk
+// (e.g. Render's disk mount path) instead of the repo's local folder,
+// which is wiped on every redeploy.
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
 const DATA_FILE = path.join(DATA_DIR, 'notes.json');
 
 export const COLORS = ['yellow', 'pink', 'mint', 'blue', 'orange', 'lilac'];
