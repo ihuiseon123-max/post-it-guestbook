@@ -2,15 +2,9 @@ services:
   - type: web
     name: postit-guestbook
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm run build
     startCommand: npm start
-    disk:
-      name: postit-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
-      - key: DATA_DIR
-        value: /var/data
       - key: NODE_VERSION
         value: 20
